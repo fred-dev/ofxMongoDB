@@ -7,6 +7,7 @@
 
 #include "ofxMongoDB.h"
 
+
 void ofxMongoDB::setup(const char * DB_URL, const char * databaseName, const char * collectionName){
     collection_name = collectionName;
     uri_string = DB_URL;
@@ -16,24 +17,23 @@ void ofxMongoDB::setup(const char * DB_URL, const char * databaseName, const cha
 bool ofxMongoDB::connect(){
     mongoc_init ();
 
-    uri = mongoc_uri_new_with_error (uri_string, &error);
-    if (!uri) {
-       fprintf (stderr,
-                "failed to parse URI: %s\n"
-                "error message:       %s\n",
-                uri_string,
-                error.message);
-       return EXIT_FAILURE;
-    }
+      uri = mongoc_uri_new_with_error (uri_string, &error);
+      if (!uri) {
+         fprintf (stderr,
+                  "failed to parse URI: %s\n"
+                  "error message:       %s\n",
+                  uri_string,
+                  error.message);
+         return EXIT_FAILURE;
+      }
 
-    client = mongoc_client_new_from_uri (uri);
-    database = mongoc_client_get_database(client, database_name);
-    collection = mongoc_client_get_collection (client, database_name, collection_name);
+      client = mongoc_client_new_from_uri (uri);
+      database = mongoc_client_get_database(client, database_name);
+      collection = mongoc_client_get_collection (client, database_name, collection_name);
 
-    if (!client) {
-       return EXIT_FAILURE;
-    }
-    
+      if (!client) {
+         return EXIT_FAILURE;
+      }
         
 }
 

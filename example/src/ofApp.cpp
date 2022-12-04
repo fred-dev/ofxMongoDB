@@ -3,8 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    myDatabase.setup("", "DB", "Collection");
-    
+    myDatabase.setup("URL_with_password", "databsename", "collectionname");
+
     myDatabase.connect();
     
    

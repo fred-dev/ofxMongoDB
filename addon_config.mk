@@ -32,8 +32,8 @@ common:
 
 
 	ADDON_SOURCES = 
-	ADDON_SOURCES += src/mongoc/mongoc.h
-	ADDON_SOURCES += src/libbson/bson.h
+# 	ADDON_SOURCES += src/mongoc/mongoc.h
+# 	ADDON_SOURCES += src/libbson/bson.h
 	ADDON_SOURCES += src/ofxMongoDB.h
 	ADDON_SOURCES += src/ofxMongoDB.cpp
 
@@ -43,9 +43,19 @@ common:
 	ADDON_HEADER_SOURCES = src/mongoc/
 	ADDON_HEADER_SOURCES += src/libbson/
 
-	ADDON_LIBS = 
-	ADDON_LIBS += libs/libbson/libbson-1.0.0.0.0.dylib
-	ADDON_LIBS += libs/libmongoc/libmongoc-1.0.0.0.0.dylib
+# 	ADDON_LIBS = 
+# 	ADDON_LIBS += libs/libbson/libbson-1.0.0.0.0.dylib
+# 	ADDON_LIBS += libs/libmongoc/libmongoc-1.0.0.0.0.dylib
+
+osx:
+	ADDON_CFLAGS =
+	ADDON_CFLAGS += -F$(OF_ROOT)/addons/ofxMongoDB/libs/libbson/
+	ADDON_CFLAGS += -F$(OF_ROOT)/addons/ofxMongoDB/libs/libmongoc/
+
+	ADDON_LDFLAGS =
+	ADDON_LDFLAGS += -F$(OF_ROOT)/addons/ofxMongoDB/libs/libmongoc/ -framework mongoc
+	ADDON_LDFLAGS += -F$(OF_ROOT)/addons/ofxMongoDB/libs/libbson/ -framework bson
+
 
 	# any special flag that should be passed to the compiler when using this
 	# addon
