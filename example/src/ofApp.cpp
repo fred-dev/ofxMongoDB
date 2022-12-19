@@ -3,8 +3,12 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    myDatabase.setup("mongoDBURL", "CollectionName", "DatabaseName");
+    myDatabase.setup("mongodb+srv://fred-mongodb:EKoB3RJuVNxahVIm@audioweather-mongodb.7vs4f.mongodb.net/?retryWrites=true&w=majority", "audioweather", "audioWeatherAll");
+
     myDatabase.connect();
+    
+   
+
 }
 
 //--------------------------------------------------------------
@@ -24,27 +28,27 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    if(key == 'p'){
-        ofJson allRecordsAsJSON;
-        allRecordsAsJSON = myDatabase.getAllRecordsAsJSON();
-        ofSavePrettyJson("allRecordsAsJSON.json", allRecordsAsJSON);
-    }
-    
-    if (key == 'u') {
-        myDatabase.updateRecord("fieldName", "New field value","object ID" );
-    }
-    
-    if(key == 'f'){
-        ofJson filteredRecordsAsJSON;
-        filteredRecordsAsJSON = myDatabase.getFilteredRecordsAsJSON("fieldName", "Filter Field value");
-        ofSavePrettyJson("filteredRecordsAsJSON.json", filteredRecordsAsJSON);
-    }
-    
-    if(key == 'v'){
-        ofJson filteredRecordRangeAsJSON;
-        filteredRecordRangeAsJSON = myDatabase.getFilteredRecordsAsJSON("fieldName", 0, 1000);
-        ofSavePrettyJson("filteredRecordRangeAsJSON.json", filteredRecordRangeAsJSON);
-    }
+	if (key == 'p') {
+		ofJson allRecordsAsJSON;
+		allRecordsAsJSON = myDatabase.getAllRecordsAsJSON();
+		ofSavePrettyJson("allRecordsAsJSON.json", allRecordsAsJSON);
+	}
+
+	if (key == 'u') {
+		myDatabase.updateRecord("fieldName", "New field value", "object ID");
+	}
+
+	if (key == 'f') {
+		ofJson filteredRecordsAsJSON;
+		filteredRecordsAsJSON = myDatabase.getFilteredRecordsAsJSON("fieldName", "Filter Field value");
+		ofSavePrettyJson("filteredRecordsAsJSON.json", filteredRecordsAsJSON);
+	}
+
+	if (key == 'v') {
+		ofJson filteredRecordRangeAsJSON;
+		filteredRecordRangeAsJSON = myDatabase.getFilteredRecordsAsJSON("fieldName", 0, 1000);
+		ofSavePrettyJson("filteredRecordRangeAsJSON.json", filteredRecordRangeAsJSON);
+	}
 }
 
 //--------------------------------------------------------------
