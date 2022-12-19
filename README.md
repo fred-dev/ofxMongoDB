@@ -22,16 +22,16 @@ To run the example, import it into the project generator, create a new project, 
 
 # Working with ofxMongoDB
 
-You will need a mongoDB database somewhere, it is pretty easy to use a cloud instance from here: [here](https://www.mongodb.com/cloud/atlas/)
+You will need a mongoDB database somewhere, it is pretty easy to use a cloud instance from [here](https://www.mongodb.com/cloud/atlas/)
 
-If you dont have any data you can use a sample data set as outlined here: [here](https://www.mongodb.com/basics/sample-database)
+If you dont have any data you can use a sample data set as outlined [here](https://www.mongodb.com/basics/sample-database)
 
-If you are using a cloud databse make sure you allow for the IP you are using to have access to the database: [here](https://www.mongodb.com/docs/atlas/security/ip-access-list/)
+If you are using a cloud databse make sure you allow for the IP you are using to have access to the database outlined [here](https://www.mongodb.com/docs/atlas/security/ip-access-list/)
 
 
 # Functionality
 
-Currently this addon can read and write to instances of mongoDB databases. Filtering is limited to a single paramater, but I will add the optin for custom queries shortly.
+Currently this addon can read and write to instances of mongoDB databases. Filtering is limited to a single paramater, but I will add the option for custom queries shortly.
 
 
 
