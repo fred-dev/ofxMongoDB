@@ -31,29 +31,39 @@ common:
 	# specified here separated by spaces or one per line using +=
 
 
-	ADDON_SOURCES = 
-# 	ADDON_SOURCES += src/mongoc/mongoc.h
-# 	ADDON_SOURCES += src/libbson/bson.h
-	ADDON_SOURCES += src/ofxMongoDB.h
-	ADDON_SOURCES += src/ofxMongoDB.cpp
-
-#ADDON_SOURCES_EXCLUDE = src/mongoc/%
-#ADDON_SOURCES_EXCLUDE += src/libbson/%
-
-	#ADDON_HEADER_SOURCES = src/mongoc/
-	#ADDON_HEADER_SOURCES += src/libbson/
-
+	
 
 
 osx:
-	ADDON_CFLAGS =
-	ADDON_CFLAGS += -F$(OF_ROOT)/addons/ofxMongoDB/libs/osx/libbson/
-	ADDON_CFLAGS += -F$(OF_ROOT)/addons/ofxMongoDB/libs/osx/libmongoc/
+	ADDON_SOURCES_EXCLUDE += /src/mongoc
+	ADDON_SOURCES_EXCLUDE += /src/mongoc/%
+	ADDON_SOURCES_EXCLUDE += /src/bson
+	ADDON_SOURCES_EXCLUDE += /src/bson/%
+	ADDON_SOURCES_EXCLUDE += /libs
+	ADDON_SOURCES_EXCLUDE += /libs/%
 
-	ADDON_LDFLAGS =
-	ADDON_LDFLAGS += -F$(OF_ROOT)/addons/ofxMongoDB/libs/libmongoc/ -framework mongoc
-	ADDON_LDFLAGS += -F$(OF_ROOT)/addons/ofxMongoDB/libs/libbson/ -framework bson
+
+	ADDON_INCLUDES_EXCLUDE += /src/mongoc
+	ADDON_INCLUDES_EXCLUDE += /src/mongoc/%
+	ADDON_INCLUDES_EXCLUDE += /src/bson
+	ADDON_INCLUDES_EXCLUDE += /src/bson/%
+	ADDON_INCLUDES_EXCLUDE += /libs
+	ADDON_INCLUDES_EXCLUDE += /libs/%
+
+	ADDON_SOURCES = 
+	ADDON_SOURCES += src/ofxMongoDB.h
+	ADDON_SOURCES += src/ofxMongoDB.cpp
+
+	ADDON_INCLUDES = 
+	ADDON_INCLUDES += src/ofxMongoDB.h
+	ADDON_INCLUDES += src/ofxMongoDB.cpp
+
+
 vs:
+	ADDON_SOURCES = 
+	ADDON_SOURCES += src/ofxMongoDB.h
+	ADDON_SOURCES += src/ofxMongoDB.cpp
+
 	ADDON_LIBS = 
 	ADDON_LIBS += libs/win64/libbson/Release/bson-1.0.lib
 	ADDON_LIBS += libs/win64/libmongoc/Release/mongoc-1.0.lib

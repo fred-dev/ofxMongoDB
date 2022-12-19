@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    myDatabase.setup("mongodb+srv://fred-mongodb:EKoB3RJuVNxahVIm@audioweather-mongodb.7vs4f.mongodb.net/?retryWrites=true&w=majority", "audioweather", "audioWeatherAll");
+    myDatabase.setup("URL", "Collection", "Databse");
 
     myDatabase.connect();
     
