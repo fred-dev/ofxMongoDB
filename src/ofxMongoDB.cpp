@@ -16,39 +16,40 @@ void ofxMongoDB::setup(const char * DB_URL, const char * databaseName, const cha
 
 bool ofxMongoDB::connect(){
     mongoc_init ();
-
-      uri = mongoc_uri_new_with_error (uri_string, &error);
-      if (!uri) {
-         fprintf (stderr,
-                  "failed to parse URI: %s\n"
-                  "error message:       %s\n",
-                  uri_string,
-                  error.message);
-         return EXIT_FAILURE;
-      }
-
-      client = mongoc_client_new_from_uri (uri);
-      database = mongoc_client_get_database(client, database_name);
-      collection = mongoc_client_get_collection (client, database_name, collection_name);
-
-      if (!client) {
-         return EXIT_FAILURE;
-      }
-        
+    uri = mongoc_uri_new_with_error (uri_string, &error);
+    if (!uri) {
+        fprintf (stderr,
+                 "failed to parse URI: %s\n"
+                 "error message:       %s\n",
+                 uri_string,
+                 error.message);
+        return false;
+    }
+    
+    client = mongoc_client_new_from_uri (uri);
+    mongoc_client_set_error_api (client, 2);
+    
+    database = mongoc_client_get_database(client, database_name);
+    collection = mongoc_client_get_collection (client, database_name, collection_name);
+    
+    if  (!client) {
+        return false;
+    }
+    
+    return true;
+    
 }
 
 
-ofJson ofxMongoDB::getDatabaseAsJSON(){
+ofJson ofxMongoDB::getAllRecordsAsJSON(){
     ofJson json;
-    mongoc_client_set_error_api (client, 2);
-
     bson_init (&query);
     cursor = mongoc_collection_find_with_opts (
-       collection,
-       &query,
-       NULL,  /* additional options */
-       NULL); /* read prefs, NULL for default */
-
+                                               collection,
+                                               &query,
+                                               NULL,  /* additional options */
+                                               NULL); /* read prefs, NULL for default */
+    
     while (mongoc_cursor_next (cursor, &doc)) {
         json.push_back(json.parse(bson_as_json (doc, NULL)));
     }
@@ -56,48 +57,115 @@ ofJson ofxMongoDB::getDatabaseAsJSON(){
     return json;
     
     if (mongoc_cursor_error (cursor, &error)) {
-       fprintf (stderr, "Cursor Failure: %s\n", error.message);
-       return EXIT_FAILURE;
+        fprintf (stderr, "Cursor Failure: %s\n", error.message);
+        return EXIT_FAILURE;
     }
     
+    bson_destroy(&query);
+    mongoc_cursor_destroy (cursor);
 }
 
-bool ofxMongoDB::close(){
-    bson_destroy (&query);
-    mongoc_cursor_destroy (cursor);
+void ofxMongoDB::close(){
+    
     mongoc_collection_destroy (collection);
     mongoc_uri_destroy (uri);
     mongoc_client_destroy (client);
     mongoc_cleanup ();
-
+    
 }
 
-bool ofxMongoDB::updateDocument(){
-    bson_t *selector = BCON_NEW ("_id", "{", "$gt", BCON_UTF8 ("0wIv9yHgG1e98MyM"), "}");
-    bson_t *update = BCON_NEW ("$set", "{", "cod", BCON_INT32 (999), "}");
-    if (!mongoc_collection_update_one (
-           collection, selector, update, NULL, NULL, &error)) {
-       fprintf (stderr, "update failed: %s\n", error.message);
-       return EXIT_FAILURE;
+void ofxMongoDB::updateRecord(const std::string& field, const std::string& value, const std::string& oid) {
+    
+    bson_error_t error;
+    bson_t* update_doc;
+    bson_oid_t bson_oid;
+    
+    // Initialize the MongoDB driver and connect to the database
+    mongoc_init();
+    
+    // Convert the oid string to a bson_oid_t
+    bson_oid_init_from_string(&bson_oid, oid.c_str());
+    
+    // Create the update document
+    update_doc = BCON_NEW("$set", "{", field.c_str(), value.c_str(), "}");
+    
+    // Update the field in the record
+    mongoc_collection_update_one(
+                                 collection,
+                                 BCON_NEW("_id", BCON_OID(&bson_oid)),
+                                 update_doc,
+                                 NULL,
+                                 NULL,
+                                 &error);
+    
+    // Clean up
+    bson_destroy(update_doc);
+}
+
+
+ofJson ofxMongoDB::getFilteredRecordsAsJSON(const std::string& field, const std::string& value){
+    
+    bson_error_t error;
+    bson_t* filter_doc;
+    ofJson json;
+    
+    // Create the filter document
+    filter_doc = BCON_NEW(field.c_str(), value.c_str());
+    
+    // Perform the find operation
+    mongoc_cursor_t* cursor = mongoc_collection_find(
+                                                     collection,
+                                                     MONGOC_QUERY_NONE,
+                                                     0,
+                                                     0,
+                                                     0,
+                                                     filter_doc,
+                                                     NULL,
+                                                     NULL);
+    
+    // Iterate over the cursor and print the documents
+    const bson_t* doc;
+    while (mongoc_cursor_next(cursor, &doc)) {
+        json.push_back(json.parse(bson_as_json (doc, NULL)));
     }
     
-    //update_one( cDocument{} << "_id" << "0wIv9yHgG1e98MyM" << finalize,
-               //cDocument{} << "$set" << open_document <<
-                          //  "cod" << 999 << close_document << finalize);
-//    database->collection.update(
-//       { _id: "0wIv9yHgG1e98MyM" },
-//       {
-//
-//         $set: {
-//           item: "ABC123",
-//           "info.publisher": "2222",
-//           tags: [ "software" ],
-//           "ratings.1": { by: "xyz", rating: 3 }
-//         }
-//       }
-//    )
+    // Clean up
+    bson_destroy(filter_doc);
+    mongoc_cursor_destroy (cursor);
+    return json;
 }
 
 
+ofJson ofxMongoDB::getFilteredRecordsAsJSON(const std::string& field, int lower_value, int upper_value) {
+    
+    bson_error_t error;
+    bson_t* filter_doc;
+    ofJson json;
+
+    // Create the filter document
+    filter_doc = BCON_NEW(field.c_str(), "{", "$gte", BCON_INT32(lower_value), "$lte", BCON_INT32(upper_value), "}");
+    
+    // Perform the find operation
+    mongoc_cursor_t* cursor = mongoc_collection_find(
+                                                     collection,
+                                                     MONGOC_QUERY_NONE,
+                                                     0,
+                                                     0,
+                                                     0,
+                                                     filter_doc,
+                                                     NULL,
+                                                     NULL);
+    
+    // Iterate over the cursor and print the documents
+    const bson_t* doc;
+    while (mongoc_cursor_next(cursor, &doc)) {
+        json.push_back(json.parse(bson_as_json (doc, NULL)));
+    }
+   
+    // Clean up
+    bson_destroy(filter_doc);
+    mongoc_cursor_destroy (cursor);
+    return json;
+}
 
 

@@ -30,14 +30,12 @@ public:
        mongoc_uri_t *uri;
     
     void setup(const char * DB_URL, const char * databaseName, const char * collectionName);
-    
     bool connect();
-    
-    bool updateDocument();
-    
-    ofJson getDatabaseAsJSON();
-    
-    bool close();
+    ofJson getAllRecordsAsJSON();
+    ofJson getFilteredRecordsAsJSON(const std::string& field, const std::string& value);
+    ofJson getFilteredRecordsAsJSON(const std::string& field, int lower_value, int upper_value);
+    void updateRecord(const std::string& field, const std::string& value, const std::string& oid);
+    void close();
 };
 
 
