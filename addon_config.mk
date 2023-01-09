@@ -35,29 +35,15 @@ common:
 
 
 osx:
-	ADDON_SOURCES_EXCLUDE += /src/mongoc
-	ADDON_SOURCES_EXCLUDE += /src/mongoc/%
-	ADDON_SOURCES_EXCLUDE += /src/bson
-	ADDON_SOURCES_EXCLUDE += /src/bson/%
-	ADDON_SOURCES_EXCLUDE += /libs
+	
+
+	ADDON_LIBS =
+	ADDON_LIBS += libs/osx/lib/libbsoncxx.dylib
+	ADDON_LIBS += libs/osx/lib/libmongocxx.dylib
+
+
 	ADDON_SOURCES_EXCLUDE += /libs/%
-
-
-	ADDON_INCLUDES_EXCLUDE += /src/mongoc
-	ADDON_INCLUDES_EXCLUDE += /src/mongoc/%
-	ADDON_INCLUDES_EXCLUDE += /src/bson
-	ADDON_INCLUDES_EXCLUDE += /src/bson/%
-	ADDON_INCLUDES_EXCLUDE += /libs
-	ADDON_INCLUDES_EXCLUDE += /libs/%
-
-	ADDON_SOURCES = 
-	ADDON_SOURCES += src/ofxMongoDB.h
-	ADDON_SOURCES += src/ofxMongoDB.cpp
-
-	ADDON_INCLUDES = 
-	ADDON_INCLUDES += src/ofxMongoDB.h
-	ADDON_INCLUDES += src/ofxMongoDB.cpp
-
+	
 
 vs:
 	ADDON_SOURCES = 

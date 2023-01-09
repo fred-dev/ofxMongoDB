@@ -7,32 +7,52 @@
 
 
 
-#include <mongoc/mongoc.h>
-#include <bson/bson.h>
+
+#include <bsoncxx/json.hpp>
+#include <bsoncxx/oid.hpp>
+#include <bsoncxx/exception/exception.hpp>
+#include <bsoncxx/builder/stream/helpers.hpp>
+#include <bsoncxx/builder/stream/document.hpp>
+#include <bsoncxx/builder/stream/array.hpp>
+
+#include <mongocxx/client.hpp>
+#include <mongocxx/stdx.hpp>
+#include <mongocxx/uri.hpp>
+#include <mongocxx/instance.hpp>
+#include <mongocxx/exception/exception.hpp>
+
 
 #include "ofMain.h"
 
-//using namespace mongocxx;
-//using namespace bsoncxx;
+using bsoncxx::builder::stream::close_array;
+using bsoncxx::builder::stream::close_document;
+using bsoncxx::builder::stream::document;
+using bsoncxx::builder::stream::finalize;
+using bsoncxx::builder::stream::open_array;
+using bsoncxx::builder::stream::open_document;
+
+using bsoncxx::builder::basic::kvp;
+using bsoncxx::builder::basic::make_array;
+using bsoncxx::builder::basic::make_document;
+
+
+using namespace mongocxx;
+
 
 class ofxMongoDB {
     
 public:
     
-       mongoc_client_t *client;
-       mongoc_collection_t *collection;
-       mongoc_cursor_t *cursor;
-       mongoc_database_t *database;
-       bson_error_t error;
-       const bson_t *doc;
-       const char *collection_name;
-       const char *database_name;
+    ofxMongoDB();
+    mongocxx::client client;
+    mongocxx::collection collection;
+    mongocxx::database database;
+    mongocxx::uri uri;
 
-       bson_t query;
-       char *str;
-       const char *uri_string;
-       mongoc_uri_t *uri;
-    
+    std::string collection_name;
+    std::string database_name;
+    std::string uri_string;
+
     void setup(const char * DB_URL, const char * databaseName, const char * collectionName);
     bool connect();
     ofJson getAllRecordsAsJSON();

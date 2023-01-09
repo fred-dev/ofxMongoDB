@@ -3,11 +3,11 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    myDatabase.setup("URL", "Collection", "Databse");
-
+	myDatabase.setup("URL", "Collection", "Databse");
+	
     myDatabase.connect();
     
-   
+    ofJson jsonFile;
 
 }
 
