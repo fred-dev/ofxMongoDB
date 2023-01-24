@@ -56,9 +56,14 @@ public:
     void setup(const char * DB_URL, const char * databaseName, const char * collectionName);
     bool connect();
     ofJson getAllRecordsAsJSON();
-    ofJson getFilteredRecordsAsJSON(const std::string& field, const std::string& value);
+    ofJson getFilteredRecordsAsJSON_String(const std::string& field, const std::string& value);
     ofJson getFilteredRecordsAsJSON(const std::string& field, int lower_value, int upper_value);
-    void updateRecord(const std::string& field, const std::string& value, const std::string& oid);
+    ofJson getFilteredRecordsAsJSON(const std::string& field, const bool value);
+    void updateRecord(const std::string& field, const std::string& value, const std::string& _oid);
+    void updateRecord(const std::string& field, const float& value, const std::string& _oid);
+    void updateRecord(const std::string& field, const int& value, const std::string& _oid);
+    void updateRecord(const std::string& field, const bool& value, const std::string& _oid);
+
     void add_fields_to_entry_from_Json(const std::string& id_str, const ofJson& json);
     void insert_json_into_DB(const ofJson& json);
     void close();
