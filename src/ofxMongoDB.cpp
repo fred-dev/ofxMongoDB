@@ -179,7 +179,7 @@ ofJson ofxMongoDB::getFilteredRecordsAsJSON_String(const std::string& field, con
         //mongocxx::cursor cursor = collection.find(document{} << field << open_document << "$eq" << value << close_document << finalize);
         for (const auto& doc : cursor) {
             try {
-                cout<<"Record" << endl;
+    
 
                 json.emplace_back(json.parse(bsoncxx::to_json(doc)));
             } catch (const std::exception& e) {

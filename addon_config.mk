@@ -36,8 +36,6 @@ common:
 
 osx:
 	
-
-	ADDON_LIBS =
 	ADDON_LIBS += libs/osx/lib/libbsoncxx.dylib
 	ADDON_LIBS += libs/osx/lib/libmongocxx.dylib
 
@@ -46,13 +44,11 @@ osx:
 	
 
 vs:
-	ADDON_SOURCES = 
-	ADDON_SOURCES += src/ofxMongoDB.h
-	ADDON_SOURCES += src/ofxMongoDB.cpp
+	ADDON_SOURCES_EXCLUDE += /libs/%
 
 	ADDON_LIBS = 
-	ADDON_LIBS += libs/win64/libbson/Release/bson-1.0.lib
-	ADDON_LIBS += libs/win64/libmongoc/Release/mongoc-1.0.lib
+	ADDON_LIBS += libs/win64/lib/bsoncxx-static.lib
+	ADDON_LIBS += libs/win64/lib/mongocxx-static.lib
 
 	# any special flag that should be passed to the compiler when using this
 	# addon
