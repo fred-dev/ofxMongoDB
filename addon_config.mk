@@ -44,11 +44,13 @@ osx:
 	
 
 vs:
-	ADDON_SOURCES_EXCLUDE += /libs/%
+	ADDON_SOURCES_EXCLUDE += /libs/osx/%
 
 	ADDON_LIBS = 
-	ADDON_LIBS += libs/win64/lib/bsoncxx-static.lib
-	ADDON_LIBS += libs/win64/lib/mongocxx-static.lib
+	ADDON_LIBS += libs/win64/lib/bson-1.0.lib
+	ADDON_LIBS += libs/win64/lib/mongoc-1.0.lib
+	ADDON_LIBS += libs/win64/lib/bsoncxx.lib
+	ADDON_LIBS += libs/win64/lib/mongocxx.lib
 
 	# any special flag that should be passed to the compiler when using this
 	# addon
