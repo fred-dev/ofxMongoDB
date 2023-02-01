@@ -38,9 +38,9 @@ osx:
 	
 	ADDON_LIBS += libs/osx/lib/libbsoncxx.dylib
 	ADDON_LIBS += libs/osx/lib/libmongocxx.dylib
-
-
 	ADDON_SOURCES_EXCLUDE += /libs/%
+
+
 	
 
 vs:
