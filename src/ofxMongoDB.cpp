@@ -192,7 +192,34 @@ ofJson ofxMongoDB::getFilteredRecordsAsJSON_String(const std::string& field, con
     return json;
 }
 
-
+ofJson ofxMongoDB::getFilteredRecordsAsJsonFromCustomStringQuery(const std::string& filter_string){
+    
+//    Filter strings can be complex requests such as:
+//
+//    std::string filter_string = R"({
+//        "$and": [
+//            { "main.temp": { "$gte": 10 } },
+//            { "main.temp": { "$lte": 20 } }
+//        ]
+//    })";
+//    
+    ofJson json;
+    try {
+        bsoncxx::document::view_or_value filter = bsoncxx::from_json(filter_string);
+        mongocxx::cursor cursor = collection.find(filter);
+        for (const auto& doc : cursor) {
+            try {
+                json.emplace_back(json.parse(bsoncxx::to_json(doc)));
+            } catch (const std::exception& e) {
+                ofLogError("ofxMongoDB::getFilteredRecordsAsJSON") << "Error: Failed to parse document as JSON: " << e.what() << std::endl;
+            }
+        }
+    } catch (const mongocxx::exception& e) {
+        ofLogError("ofxMongoDB::getFilteredRecordsAsJSON") << "Error: " << e.what() << std::endl;
+    }
+    
+    return json;
+}
 ofJson ofxMongoDB::getFilteredRecordsAsJSON(const std::string& field, const bool value) {
     ofJson json;
     try {

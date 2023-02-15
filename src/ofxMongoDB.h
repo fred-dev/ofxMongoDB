@@ -59,6 +59,7 @@ public:
     ofJson getFilteredRecordsAsJSON_String(const std::string& field, const std::string& value);
     ofJson getFilteredRecordsAsJSON(const std::string& field, int lower_value, int upper_value);
     ofJson getFilteredRecordsAsJSON(const std::string& field, const bool value);
+    ofJson getFilteredRecordsAsJsonFromCustomStringQuery(const std::string& filter_string);
     void updateRecord(const std::string& field, const std::string& value, const std::string& _oid);
     void updateRecord(const std::string& field, const float& value, const std::string& _oid);
     void updateRecord(const std::string& field, const int& value, const std::string& _oid);
